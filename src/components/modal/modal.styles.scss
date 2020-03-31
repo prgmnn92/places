@@ -1,0 +1,37 @@
+.Modal {
+    position: fixed;
+    z-index: 500;
+    background-color: white;
+    width: 70%;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px black;
+    padding: 16px;
+    left: 15%;
+    top: 30%;
+    box-sizing: border-box;
+    transition: all 0.3s ease-out;
+    form {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        height: 100%;
+        justify-content: space-between;
+
+
+
+        .margin {
+            margin: 5px;
+            width: 80%;
+        }
+        .modal-button {
+            max-width: 130px;
+        }
+    }
+}
+
+@media (min-width: 600px) {
+    .Modal {
+        width: 350px;
+        left: calc(50% - 175px);
+    }
+}
