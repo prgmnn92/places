@@ -2,7 +2,16 @@ import { ActionTypes } from "./types";
 
 const INITIAL_STATE = {
   isModalOpen: false,
-  events: [],
+  events: [
+    {
+      title: "First Title Ever",
+      text: "This is an Event and This is an Event",
+      position: {
+        lat: 34.04924594193164,
+        lng: -118.24104309082031
+      }
+    }
+  ],
   positionOfActualEvent: {}
 };
 
@@ -23,7 +32,6 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...action.payload,
         position: state.positionOfActualEvent
       };
-      console.log(event);
       return {
         ...state,
         events: [...state.events, event]

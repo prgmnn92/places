@@ -16,9 +16,20 @@ class GoogleMaps extends React.Component {
     console.log(events);
 
     for (let event of events) {
+      let content = `<h1>${event.title}</h1><br/><div>${event.text}</div>`;
       let marker = new google.maps.Marker({
         position: event.position,
         map: map
+      });
+
+      var infowindow = new google.maps.InfoWindow({
+        content: content,
+
+        maxWidth: 350
+      });
+
+      google.maps.event.addListener(marker, "click", () => {
+        infowindow.open(map, marker);
       });
     }
   }
@@ -29,9 +40,20 @@ class GoogleMaps extends React.Component {
     console.log(events);
 
     for (let event of events) {
+      let content = `<h1>${event.title}</h1><br/><div>${event.text}</div>`;
       let marker = new google.maps.Marker({
         position: event.position,
         map: map
+      });
+
+      var infowindow = new google.maps.InfoWindow({
+        content: content,
+
+        maxWidth: 350
+      });
+
+      google.maps.event.addListener(marker, "click", () => {
+        infowindow.open(map, marker);
       });
     }
     console.log(nextProps.events !== this.props.events);
