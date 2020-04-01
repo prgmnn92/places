@@ -1,87 +1,48 @@
+/* eslint-disable no-loop-func */
 /* eslint-disable no-undef */
 import React from "react";
+import { connect } from "react-redux";
 
 import Modal from "../modal/modal.component";
 
+import { setActualPosition, openModal } from "../../redux/actions";
+
 import "./googleMaps.styles.scss";
 
-let events = [
-  {
-    title: "testz",
-    text: "text",
-    position: {
-      lat: 34.04924594193164,
-      lng: -117.24104309082031
+class GoogleMaps extends React.Component {
+  componentDidMount() {
+    let map = initMap(this);
+    const { events } = this.props;
+    console.log(events);
+
+    for (let event of events) {
+      let marker = new google.maps.Marker({
+        position: event.position,
+        map: map
+      });
     }
   }
-];
 
-class GoogleMaps extends React.Component {
-  state = {
-    createEvent: false,
-    events: [
-      {
-        title: "testz",
-        text: "text",
-        position: {
-          lat: 34.04924594193164,
-          lng: -117.24104309082031
-        }
-      },
-      {
-        title: "test",
-        text: "text",
-        position: {
-          lat: 34.04924594193164,
-          lng: -119.24104309082031
-        }
-      }
-    ]
-  };
+  shouldComponentUpdate(nextProps, nextState) {
+    let map = initMap(this);
+    const { events } = this.props;
+    console.log(events);
 
-  componentDidMount() {
-    initMap(this);
+    for (let event of events) {
+      let marker = new google.maps.Marker({
+        position: event.position,
+        map: map
+      });
+    }
+    console.log(nextProps.events !== this.props.events);
+    return nextProps.events !== this.props.events;
   }
-
-  createEventCancelHandler = () => {
-    this.setState({
-      createEvent: false
-    });
-  };
-
-  openCreateEventModal = () => {
-    this.setState({
-      createEvent: true
-    });
-  };
-
-  createEvent = (title, text, position) => {
-    let event = {
-      title: title,
-      text: text,
-      position: position
-    };
-
-    this.setState({
-      ...this.state,
-      events: [...this.state.events, events]
-    });
-  };
 
   render() {
     return (
       <React.Fragment>
-        <Modal
-          show={this.state.createEvent}
-          modalClosed={this.createEventCancelHandler}
-          createEvent={this.createEvent}
-        />
-
-        <section
-          // onClick={this.openCreateEventModal}
-          id="map"
-          className="map"
-        ></section>
+        <Modal />
+        <section id="map" className="map"></section>
       </React.Fragment>
     );
   }
@@ -89,7 +50,7 @@ class GoogleMaps extends React.Component {
 
 //Helper Functions
 function initMap(component) {
-  var map = new google.maps.Map(document.getElementById("map"), {
+  let map = new google.maps.Map(document.getElementById("map"), {
     zoom: 13,
     center: {
       lat: 34.04924594193164,
@@ -97,7 +58,7 @@ function initMap(component) {
     }
   });
 
-  for (let event of component.state.events) {
+  for (let event of component.props.events) {
     let marker = new google.maps.Marker({ position: event.position, map: map });
 
     var infowindow = new google.maps.InfoWindow({
@@ -114,9 +75,23 @@ function initMap(component) {
   map.addListener("click", event => {
     let position = event.latLng;
 
-    let marker = new google.maps.Marker({ position: position, map: map });
-    component.setState({ createEvent: true });
+    // marker erst erstellen wenn openModal fertig ist bzw  create Button gedrückt wurde
+    //let marker = new google.maps.Marker({ position: position, map: map });
+    console.log(position);
+    component.props.setActualPosition(position);
+    component.props.openModal();
   });
+  return map;
 }
 
-export default GoogleMaps;
+const mapStateToProps = state => ({
+  positionOfActualEvent: state.positionOfActualEvent,
+  events: state.events
+});
+
+const mapDispatchToProps = dispatch => ({
+  setActualPosition: position => dispatch(setActualPosition(position)),
+  openModal: () => dispatch(openModal())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoogleMaps);

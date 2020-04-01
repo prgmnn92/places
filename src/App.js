@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -13,33 +13,6 @@ import GoogleMaps from "./components/googleMaps/googleMaps.component";
 
 import "./App.css";
 
-const useStyles = makeStyles(theme => ({
-  main: {
-    height: "100%"
-  },
-
-  sidebar: {
-    height: "90%"
-  },
-  map: {
-    height: "90%"
-  },
-  root: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 1
-  },
-  marker: {
-    width: "50px",
-    height: "50px",
-    background: "black"
-  }
-}));
-
 const Element = () => {
   return <Paper elevation={3}>Test</Paper>;
 };
@@ -52,44 +25,45 @@ class CardList extends React.Component {
   render() {
     return (
       <div>
-        {this.state.data.map(element => (
-          <Element />
+        {this.state.data.map((element, id) => (
+          <Element key={id} />
         ))}
       </div>
     );
   }
 }
 
-function App() {
-  const classes = useStyles();
-  return (
-    <Grid container className={classes.main}>
-      <Grid item xs={12}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              News
-            </Typography>
-            <Button color="inherit">Login</Button>
-          </Toolbar>
-        </AppBar>
+class App extends React.Component {
+  render() {
+    return (
+      <Grid container className="main">
+        <Grid item xs={12}>
+          <AppBar position="static">
+            <Toolbar>
+              <IconButton
+                edge="start"
+                className="menuButton"
+                color="inherit"
+                aria-label="menu"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" className="title">
+                News
+              </Typography>
+              <Button color="inherit">Login</Button>
+            </Toolbar>
+          </AppBar>
+        </Grid>
+        <Grid className="sidebar" item xs={12} sm={3}>
+          <CardList />
+        </Grid>
+        <Grid className="map" item xs={12} sm={9}>
+          <GoogleMaps />
+        </Grid>
       </Grid>
-      <Grid className="sidebar" item xs={12} sm={3}>
-        <CardList />
-      </Grid>
-      <Grid className={classes.map} item xs={12} sm={9}>
-        <GoogleMaps />
-      </Grid>
-    </Grid>
-  );
+    );
+  }
 }
 
 export default App;

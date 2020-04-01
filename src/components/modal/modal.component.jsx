@@ -1,30 +1,34 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Button, TextField } from "@material-ui/core";
+
+import { createEvent, closeModal } from "../../redux/actions";
 
 import "./modal.styles.scss";
 import Backdrop from "../backdrop/backdrop.component";
 
 class Modal extends React.Component {
+  state = {
+    title: "",
+    text: ""
+  };
   shouldComponentUpdate(nextProps, nextState) {
     return (
-      nextProps.show !== this.props.show ||
+      nextProps.isModalOpen !== this.props.isModalOpen ||
       nextProps.children !== this.props.children
     );
   }
 
-  componentWillUpdate() {
-    console.log("[Modal] WillUpdate");
-  }
-
   render() {
+    const { isModalOpen, createEvent, closeModal } = this.props;
     return (
       <React.Fragment>
-        <Backdrop show={this.props.show} clicked={this.props.modalClosed} />
+        <Backdrop />
         <div
           className="Modal"
           style={{
-            transform: this.props.show ? "translateY(0)" : "translateY(-100vh)",
-            opacity: this.props.show ? "1" : "0"
+            transform: isModalOpen ? "translateY(0)" : "translateY(-100vh)",
+            opacity: isModalOpen ? "1" : "0"
           }}
         >
           <form className noValidate autoComplete="off">
@@ -33,6 +37,7 @@ class Modal extends React.Component {
               id="filled-basic"
               label="Eventname"
               variant="filled"
+              onChange={e => this.setState({ title: e.target.value })}
             />
             <TextField
               className="margin"
@@ -41,9 +46,13 @@ class Modal extends React.Component {
               multiline
               rows="6"
               variant="filled"
+              onChange={e => this.setState({ text: e.target.value })}
             />
             <Button
-              onClick={this.props.modalClosed}
+              onClick={() => {
+                createEvent(this.state);
+                closeModal();
+              }}
               className="margin modal-button"
               variant="contained"
               color="primary"
@@ -57,4 +66,13 @@ class Modal extends React.Component {
   }
 }
 
-export default Modal;
+const mapStateToProps = state => ({
+  isModalOpen: state.isModalOpen
+});
+
+const mapDispatchToProps = dispatch => ({
+  closeModal: () => dispatch(closeModal()),
+  createEvent: event => dispatch(createEvent(event))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);
