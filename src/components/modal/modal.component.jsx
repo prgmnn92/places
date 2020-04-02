@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable no-undef */
 import React from "react";
 import { connect } from "react-redux";
 import { Button, TextField } from "@material-ui/core";
@@ -10,17 +12,26 @@ import Backdrop from "../backdrop/backdrop.component";
 class Modal extends React.Component {
   state = {
     title: "",
-    text: ""
+    text: "",
+    endTime: "",
+    startTime: ""
   };
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      nextProps.isModalOpen !== this.props.isModalOpen ||
-      nextProps.children !== this.props.children
-    );
-  }
 
   render() {
-    const { isModalOpen, createEvent, closeModal } = this.props;
+    const { isModalOpen, createEvent, closeModal, position } = this.props;
+
+    let date = new Date();
+    let stringDate =
+      date.getFullYear() +
+      "-" +
+      ("00" + date.getMonth()).slice(-2) +
+      "-" +
+      ("00" + date.getDay()).slice(-2) +
+      "T" +
+      ("00" + date.getHours()).slice(-2) +
+      ":" +
+      ("00" + date.getMinutes()).slice(-2);
+
     return (
       <React.Fragment>
         <Backdrop />
@@ -37,6 +48,7 @@ class Modal extends React.Component {
               id="filled-basic"
               label="Eventname"
               variant="filled"
+              value={this.state.title}
               onChange={e => this.setState({ title: e.target.value })}
             />
             <TextField
@@ -45,13 +57,59 @@ class Modal extends React.Component {
               label="Description"
               multiline
               rows="6"
+              value={this.state.text}
               variant="filled"
               onChange={e => this.setState({ text: e.target.value })}
             />
+            <TextField
+              id="datetime-local"
+              label="Von"
+              type="datetime-local"
+              defaultValue={stringDate}
+              onChange={e => this.setState({ startTime: e.target.value })}
+              className="margin"
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
+            <TextField
+              id="datetime-local"
+              label="bis"
+              type="datetime-local"
+              defaultValue={stringDate}
+              onChange={e => this.setState({ endTime: e.target.value })}
+              className="margin"
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
             <Button
               onClick={() => {
-                createEvent(this.state);
-                closeModal();
+                if (this.state.text.length && this.state.title.length) {
+                  createEvent(this.state);
+
+                  let content = `<h1>${this.state.title}</h1><br/><div>${this.state.text}</div>`;
+                  let marker = new google.maps.Marker({
+                    position: position,
+                    map: this.props.mapRef
+                  });
+
+                  let infowindow = new google.maps.InfoWindow({
+                    content: content,
+                    maxWidth: 350
+                  });
+
+                  google.maps.event.addListener(marker, "click", () => {
+                    infowindow.open(map, marker);
+                  });
+                  closeModal();
+                  this.setState({
+                    text: "",
+                    title: ""
+                  });
+                } else {
+                  alert("Please fill your event with informations...");
+                }
               }}
               className="margin modal-button"
               variant="contained"
@@ -67,7 +125,8 @@ class Modal extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  isModalOpen: state.isModalOpen
+  isModalOpen: state.isModalOpen,
+  position: state.positionOfActualEvent
 });
 
 const mapDispatchToProps = dispatch => ({

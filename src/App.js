@@ -1,4 +1,5 @@
 import React from "react";
+import { Switch, Route } from "react-router-dom";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,8 +9,8 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Grid from "@material-ui/core/Grid";
 
-import EventCardList from "./components/event-card-list/event-card-list.component";
-import GoogleMaps from "./components/googleMaps/googleMaps.component";
+import EventPage from "./pages/event-page/event-page.component";
+import LoginSignUpPage from "./pages/login-signup-page/login-signup-page.component";
 
 import "./App.css";
 
@@ -35,12 +36,10 @@ class App extends React.Component {
             </Toolbar>
           </AppBar>
         </Grid>
-        <Grid className="sidebar" item xs={12} sm={3}>
-          <EventCardList />
-        </Grid>
-        <Grid className="map" item xs={12} sm={9}>
-          <GoogleMaps />
-        </Grid>
+        <Switch>
+          <Route exact path="/" component={EventPage} />
+          <Route exact path="/login" component={LoginSignUpPage} />
+        </Switch>
       </Grid>
     );
   }

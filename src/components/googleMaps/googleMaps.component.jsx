@@ -9,9 +9,11 @@ import { setActualPosition, openModal } from "../../redux/actions";
 
 import "./googleMaps.styles.scss";
 
+let map;
+
 class GoogleMaps extends React.Component {
   componentDidMount() {
-    let map = initMap(this);
+    map = initMap(this);
     const { events } = this.props;
     console.log(events);
 
@@ -22,7 +24,7 @@ class GoogleMaps extends React.Component {
         map: map
       });
 
-      var infowindow = new google.maps.InfoWindow({
+      let infowindow = new google.maps.InfoWindow({
         content: content,
 
         maxWidth: 350
@@ -32,38 +34,12 @@ class GoogleMaps extends React.Component {
         infowindow.open(map, marker);
       });
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    let map = initMap(this);
-    const { events } = this.props;
-    console.log(events);
-
-    for (let event of events) {
-      let content = `<h1>${event.title}</h1><br/><div>${event.text}</div>`;
-      let marker = new google.maps.Marker({
-        position: event.position,
-        map: map
-      });
-
-      var infowindow = new google.maps.InfoWindow({
-        content: content,
-
-        maxWidth: 350
-      });
-
-      google.maps.event.addListener(marker, "click", () => {
-        infowindow.open(map, marker);
-      });
-    }
-    console.log(nextProps.events !== this.props.events);
-    return nextProps.events !== this.props.events;
   }
 
   render() {
     return (
       <React.Fragment>
-        <Modal />
+        <Modal mapRef={map} />
         <section id="map" className="map"></section>
       </React.Fragment>
     );
@@ -98,7 +74,6 @@ function initMap(component) {
     let position = event.latLng;
 
     // marker erst erstellen wenn openModal fertig ist bzw  create Button gedrückt wurde
-    //let marker = new google.maps.Marker({ position: position, map: map });
     console.log(position);
     component.props.setActualPosition(position);
     component.props.openModal();
