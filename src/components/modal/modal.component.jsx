@@ -42,7 +42,7 @@ class Modal extends React.Component {
             opacity: isModalOpen ? "1" : "0"
           }}
         >
-          <form className noValidate autoComplete="off">
+          <form noValidate autoComplete="off">
             <TextField
               className="margin"
               id="filled-basic"

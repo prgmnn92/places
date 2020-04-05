@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+
+import { auth, createUserProfileDocument } from "../../firebase/firebase";
 
 function Copyright() {
   return (
@@ -47,6 +49,48 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignUp({ contentHandler }) {
   const classes = useStyles();
+  const [userCredentials, setUserCredentials] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: ""
+  });
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+
+    const { firstName, lastName, email, password } = userCredentials;
+
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      await createUserProfileDocument(user, { firstName, lastName });
+
+      console.log(user);
+
+      setUserCredentials({
+        firstName: "",
+        lastname: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChange = event => {
+    const { name, value } = event.target;
+
+    setUserCredentials({
+      ...userCredentials,
+      [name]: value
+    });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -65,6 +109,7 @@ export default function SignUp({ contentHandler }) {
                 autoComplete="fname"
                 name="firstName"
                 variant="outlined"
+                onChange={handleChange}
                 required
                 fullWidth
                 id="firstName"
@@ -75,6 +120,7 @@ export default function SignUp({ contentHandler }) {
             <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
+                onChange={handleChange}
                 required
                 fullWidth
                 id="lastName"
@@ -86,6 +132,7 @@ export default function SignUp({ contentHandler }) {
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
+                onChange={handleChange}
                 required
                 fullWidth
                 id="email"
@@ -97,6 +144,7 @@ export default function SignUp({ contentHandler }) {
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
+                onChange={handleChange}
                 required
                 fullWidth
                 name="password"
@@ -118,6 +166,7 @@ export default function SignUp({ contentHandler }) {
             fullWidth
             variant="contained"
             color="primary"
+            onClick={handleSubmit}
             className={classes.submit}
           >
             Sign Up

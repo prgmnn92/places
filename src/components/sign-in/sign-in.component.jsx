@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,10 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+
+import { auth } from "../../firebase/firebase";
+
+import firebase from "firebase/app";
 
 function Copyright() {
   return (
@@ -62,9 +66,56 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignIn({ contentHandler }) {
   const classes = useStyles();
+  const [userCredentials, setUserCredentials] = useState({
+    email: "",
+    password: ""
+  });
+  const [userStatus, setUserStatus] = useState(false);
 
-  return (
-    <Grid container component="main" className={classes.root}>
+  useEffect(() => {
+    // code to run on component mount
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        setUserStatus(true);
+        console.log(user);
+        // User is signed in.
+      } else {
+        setUserStatus(false);
+        // No user is signed in.
+      }
+    });
+  }, []);
+
+  const handleSubmit = event => {
+    const { email, password } = userCredentials;
+    try {
+      const { user } = auth.signInWithEmailAndPassword(email, password);
+      if (user) {
+        setUserStatus(true);
+      }
+      setUserCredentials({ email: "", password: "" });
+    } catch (error) {
+      console.log(error);
+    }
+
+    event.preventDefault();
+  };
+
+  const handleChange = event => {
+    const { value, name } = event.target;
+    console.log(userCredentials);
+
+    setUserCredentials({
+      ...userCredentials,
+      [name]: value
+    });
+  };
+
+  const display = userStatus ? (
+    <h2>You are signed in</h2>
+  ) : (
+    <React.Fragment>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -78,6 +129,7 @@ export default function SignIn({ contentHandler }) {
           <form className={classes.form} noValidate>
             <TextField
               variant="outlined"
+              onChange={e => handleChange(e)}
               margin="normal"
               required
               fullWidth
@@ -89,6 +141,7 @@ export default function SignIn({ contentHandler }) {
             />
             <TextField
               variant="outlined"
+              onChange={e => handleChange(e)}
               margin="normal"
               required
               fullWidth
@@ -104,6 +157,7 @@ export default function SignIn({ contentHandler }) {
             />
             <Button
               type="submit"
+              onClick={handleSubmit}
               fullWidth
               variant="contained"
               color="primary"
@@ -133,6 +187,12 @@ export default function SignIn({ contentHandler }) {
           </form>
         </div>
       </Grid>
+    </React.Fragment>
+  );
+
+  return (
+    <Grid container component="main" className={classes.root}>
+      {display}
     </Grid>
   );
 }
