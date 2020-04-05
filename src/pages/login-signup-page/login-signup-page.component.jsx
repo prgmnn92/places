@@ -1,45 +1,57 @@
-import React from "react";
+import React from 'react';
+import { connect } from 'react-redux';
 
-import SignIn from "../../components/sign-in/sign-in.component";
-import SignUp from "../../components/sign-up/sign-up.component";
-import { auth } from "../../firebase/firebase";
+import { Grid } from '@material-ui/core';
+
+import SignIn from '../../components/sign-in/sign-in.component';
+import SignUp from '../../components/sign-up/sign-up.component';
+import { auth } from '../../firebase/firebase';
+import InfoPaper from '../../components/info-paper/info-paper.component';
 
 class LoginSignUpPage extends React.Component {
-  state = {
-    showSignUp: false,
-    userIsSignedIn: false
-  };
+	state = {
+		showSignUp: false,
+		userIsSignedIn: false
+	};
 
-  componentDidMount() {
-    let user = auth.currentUser;
+	componentDidMount() {
+		let user = auth.currentUser;
 
-    console.log(user);
+		console.log(user);
 
-    if (user) {
-      // User is signed in.
-      this.state.setState({
-        userIsSignedIn: true
-      });
-    } else {
-      // No user is signed in.
-    }
-  }
+		if (user) {
+			// User is signed in.
+			this.state.setState({
+				userIsSignedIn: true
+			});
+		} else {
+			// No user is signed in.
+		}
+	}
 
-  contentHandler = state => {
-    this.setState({ showSignUp: state });
-  };
-
-  render() {
-    const { showSignUp, userIsSignedIn } = this.state;
-    const content =
-      showSignUp && !userIsSignedIn ? (
-        <SignUp contentHandler={this.contentHandler} />
-      ) : (
-        <SignIn contentHandler={this.contentHandler} />
-      );
-
-    return <React.Fragment>{content}</React.Fragment>;
-  }
+	render() {
+		const { user } = this.props;
+		return (
+			<React.Fragment>
+				{user ? (
+					<InfoPaper>YOU ARE SIGNED IN</InfoPaper>
+				) : (
+					<Grid container spacing={3}>
+						<Grid item xs={6}>
+							<SignIn />
+						</Grid>
+						<Grid item xs={6}>
+							<SignUp />
+						</Grid>
+					</Grid>
+				)}
+			</React.Fragment>
+		);
+	}
 }
 
-export default LoginSignUpPage;
+const mapStateToProps = (state) => ({
+	user: state.user
+});
+
+export default connect(mapStateToProps)(LoginSignUpPage);
