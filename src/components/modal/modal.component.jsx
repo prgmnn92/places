@@ -14,7 +14,7 @@ class Modal extends React.Component {
     title: "",
     text: "",
     endTime: "",
-    startTime: ""
+    startTime: "",
   };
 
   render() {
@@ -39,7 +39,7 @@ class Modal extends React.Component {
           className="Modal"
           style={{
             transform: isModalOpen ? "translateY(0)" : "translateY(-100vh)",
-            opacity: isModalOpen ? "1" : "0"
+            opacity: isModalOpen ? "1" : "0",
           }}
         >
           <form noValidate autoComplete="off">
@@ -49,7 +49,7 @@ class Modal extends React.Component {
               label="Eventname"
               variant="filled"
               value={this.state.title}
-              onChange={e => this.setState({ title: e.target.value })}
+              onChange={(e) => this.setState({ title: e.target.value })}
             />
             <TextField
               className="margin"
@@ -59,17 +59,17 @@ class Modal extends React.Component {
               rows="6"
               value={this.state.text}
               variant="filled"
-              onChange={e => this.setState({ text: e.target.value })}
+              onChange={(e) => this.setState({ text: e.target.value })}
             />
             <TextField
               id="datetime-local"
               label="Von"
               type="datetime-local"
               defaultValue={stringDate}
-              onChange={e => this.setState({ startTime: e.target.value })}
+              onChange={(e) => this.setState({ startTime: e.target.value })}
               className="margin"
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
             />
             <TextField
@@ -77,10 +77,10 @@ class Modal extends React.Component {
               label="bis"
               type="datetime-local"
               defaultValue={stringDate}
-              onChange={e => this.setState({ endTime: e.target.value })}
+              onChange={(e) => this.setState({ endTime: e.target.value })}
               className="margin"
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
             />
             <Button
@@ -91,12 +91,12 @@ class Modal extends React.Component {
                   let content = `<h1>${this.state.title}</h1><br/><div>${this.state.text}</div>`;
                   let marker = new google.maps.Marker({
                     position: position,
-                    map: this.props.mapRef
+                    map: this.props.mapRef,
                   });
 
                   let infowindow = new google.maps.InfoWindow({
                     content: content,
-                    maxWidth: 350
+                    maxWidth: 350,
                   });
 
                   google.maps.event.addListener(marker, "click", () => {
@@ -105,7 +105,7 @@ class Modal extends React.Component {
                   closeModal();
                   this.setState({
                     text: "",
-                    title: ""
+                    title: "",
                   });
                 } else {
                   alert("Please fill your event with informations...");
@@ -124,14 +124,14 @@ class Modal extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isModalOpen: state.isModalOpen,
-  position: state.positionOfActualEvent
+  position: state.positionOfActualEvent,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   closeModal: () => dispatch(closeModal()),
-  createEvent: event => dispatch(createEvent(event))
+  createEvent: (event) => dispatch(createEvent(event)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modal);

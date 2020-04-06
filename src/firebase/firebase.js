@@ -10,10 +10,34 @@ const firebaseConfig = {
   storageBucket: "places-cfdaa.appspot.com",
   messagingSenderId: "700497889963",
   appId: "1:700497889963:web:a2118a202f88d1c21a85ee",
-  measurementId: "G-HRT5LGVDWH"
+  measurementId: "G-HRT5LGVDWH",
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+export const createEventDocument = async (event) => {
+  const eventRef = firestore.doc("events/" + event.id);
+  //const snapShot = await eventRef.get();
+
+  const createdAt = new Date();
+
+  try {
+    await eventRef.set({
+      ...event,
+      createdAt,
+    });
+  } catch (error) {
+    console.log("error creating event", error.message);
+  }
+
+  return eventRef;
+};
+
+export const getAllEvents = async () => {
+  const snapShot = await firestore.collection("events").get();
+
+  return snapShot.docs.map((doc) => doc.data());
+};
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
@@ -33,7 +57,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         lastName,
         email,
         createdAt,
-        ...additionalData
+        ...additionalData,
       });
     } catch (error) {
       console.log("error creating user", error.message);

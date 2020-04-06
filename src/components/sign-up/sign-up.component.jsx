@@ -10,10 +10,11 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+
 import Container from "@material-ui/core/Container";
 
 import { auth, createUserProfileDocument } from "../../firebase/firebase";
+import "./sign-up.styles.scss";
 
 function Copyright() {
   return (
@@ -28,35 +29,15 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3)
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
-}));
-
-export default function SignUp({ contentHandler }) {
-  const classes = useStyles();
+export default function SignUp() {
   const [userCredentials, setUserCredentials] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    password: ""
+    password: "",
   });
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const { firstName, lastName, email, password } = userCredentials;
@@ -76,33 +57,33 @@ export default function SignUp({ contentHandler }) {
         lastname: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
       });
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
 
     setUserCredentials({
       ...userCredentials,
-      [name]: value
+      [name]: value,
     });
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container className="sign-up" component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+      <div className="paper">
+        <Avatar className="avatar">
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -167,17 +148,13 @@ export default function SignUp({ contentHandler }) {
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            className={classes.submit}
+            className="submit"
           >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link
-                onClick={() => contentHandler(false)}
-                href="#"
-                variant="body2"
-              >
+              <Link href="#" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

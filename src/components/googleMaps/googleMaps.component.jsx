@@ -5,7 +5,12 @@ import { connect } from "react-redux";
 
 import Modal from "../modal/modal.component";
 
-import { setActualPosition, openModal } from "../../redux/actions";
+import {
+  setActualPosition,
+  openModal,
+  setAllEvents,
+} from "../../redux/actions";
+import { getAllEvents } from "../../firebase/firebase";
 
 import "./googleMaps.styles.scss";
 
@@ -15,25 +20,31 @@ class GoogleMaps extends React.Component {
   componentDidMount() {
     map = initMap(this);
     const { events } = this.props;
-    console.log(events);
 
     for (let event of events) {
       let content = `<h1>${event.title}</h1><br/><div>${event.text}</div>`;
       let marker = new google.maps.Marker({
         position: event.position,
-        map: map
+        map: map,
       });
 
       let infowindow = new google.maps.InfoWindow({
         content: content,
 
-        maxWidth: 350
+        maxWidth: 350,
       });
 
       google.maps.event.addListener(marker, "click", () => {
         infowindow.open(map, marker);
       });
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.events === nextProps.events) {
+      return true;
+    }
+
+    return false;
   }
 
   render() {
@@ -49,11 +60,11 @@ class GoogleMaps extends React.Component {
 //Helper Functions
 function initMap(component) {
   let map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 13,
+    zoom: 11,
     center: {
-      lat: 34.04924594193164,
-      lng: -118.24104309082031
-    }
+      lat: 52.216308529631256,
+      lng: 10.521203154185534,
+    },
   });
 
   for (let event of component.props.events) {
@@ -62,7 +73,7 @@ function initMap(component) {
     var infowindow = new google.maps.InfoWindow({
       content: event.text,
 
-      maxWidth: 350
+      maxWidth: 350,
     });
 
     google.maps.event.addListener(marker, "click", () => {
@@ -70,25 +81,33 @@ function initMap(component) {
     });
   }
 
-  map.addListener("click", event => {
+  map.addListener("click", (event) => {
     let position = event.latLng;
+    // let position = {
+    //   ...event.latLng.lat,
+    //   ...event.latLng.lng,
+    // };
+    let latLng = {
+      lat: position.lat(),
+      lng: position.lng(),
+    };
 
     // marker erst erstellen wenn openModal fertig ist bzw  create Button gedrückt wurde
-    console.log(position);
-    component.props.setActualPosition(position);
+    console.log(latLng);
+    component.props.setActualPosition(latLng);
     component.props.openModal();
   });
   return map;
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   positionOfActualEvent: state.positionOfActualEvent,
-  events: state.events
+  events: state.events,
 });
 
-const mapDispatchToProps = dispatch => ({
-  setActualPosition: position => dispatch(setActualPosition(position)),
-  openModal: () => dispatch(openModal())
+const mapDispatchToProps = (dispatch) => ({
+  setActualPosition: (position) => dispatch(setActualPosition(position)),
+  openModal: () => dispatch(openModal()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleMaps);

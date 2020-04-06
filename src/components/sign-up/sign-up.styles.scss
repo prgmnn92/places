@@ -1,0 +1,24 @@
+.sign-up {
+	.paper {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 20% 0;
+
+	}
+	
+	.avatar {
+		margin: 5%;
+		background-color: rgb(224, 85, 85);
+	}
+	
+	form {
+		width: 100%; // Fix IE 11 issue.
+		margin-top: 5%;
+	}
+	
+	.submit {
+		margin: 5% 0 2%;
+	}
+
+}
