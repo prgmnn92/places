@@ -1,12 +1,27 @@
 .event-card {
+    height: 125px;
+    margin-top: 10px;
+    display: flex;
 
-    
+    .image {
+        width: 40%;
+        background-image: url("https://source.unsplash.com/random");
+        background-repeat: no-repeat;
+        background-color: white;
+        background-size: cover;
+        background-position: center;
+        margin: 0;
+        padding: 0;
+    }
+
+
     h3 {
         background: #3F51B5;
         color: whitesmoke;
         margin: 0;
         padding: 15px;
     }
+
     span {
         display: block;
         padding: 15px;
