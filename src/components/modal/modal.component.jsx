@@ -16,6 +16,25 @@ class Modal extends React.Component {
     endTime: "",
     startTime: "",
   };
+  componentDidMount() {
+    let date = new Date();
+    let stringDate =
+      date.getFullYear() +
+      "-" +
+      ("00" + date.getMonth()).slice(-2) +
+      "-" +
+      ("00" + date.getDay()).slice(-2) +
+      "T" +
+      ("00" + date.getHours()).slice(-2) +
+      ":" +
+      ("00" + date.getMinutes()).slice(-2);
+    console.log(stringDate);
+
+    this.setState({
+      startTime: stringDate,
+      endTime: stringDate,
+    });
+  }
 
   render() {
     const { isModalOpen, createEvent, closeModal, position } = this.props;

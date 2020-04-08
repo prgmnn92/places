@@ -14,7 +14,9 @@ const EventCard = ({ event, removeEvent }) => {
       <div className="image" />
 
       <div className="content">
-        <h6>Event Card</h6>
+        <h6>
+          Erstellt von {event.user.firstName} {event.user.lastName}
+        </h6>
         <h3>{event.title}</h3>
         <span className="event-description">{event.text}</span>
         <div className="row">
