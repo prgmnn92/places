@@ -1,14 +1,18 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Paper, Button } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
 import RoomIcon from "@material-ui/icons/Room";
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import { removeEvent } from "../../redux/actions";
 
 import "./event-card.styles.scss";
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, removeEvent }) => {
   return (
     <Paper className="event-card" elevation={3}>
       <div className="image" />
+
       <div className="content">
         <h6>Event Card</h6>
         <h3>{event.title}</h3>
@@ -29,8 +33,16 @@ const EventCard = ({ event }) => {
           </Button>
         </div>
       </div>
+      <HighlightOffIcon
+        className="delete-button"
+        onClick={() => removeEvent(event.id)}
+      />
     </Paper>
   );
 };
 
-export default EventCard;
+const mapDispatchToProps = (disptach) => ({
+  removeEvent: (id) => disptach(removeEvent(id)),
+});
+
+export default connect(null, mapDispatchToProps)(EventCard);

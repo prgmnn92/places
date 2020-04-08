@@ -38,6 +38,16 @@ export const getAllEvents = async () => {
 
   return snapShot.docs.map((doc) => doc.data());
 };
+export const removeEventDocument = async (id) => {
+  const eventRef = firestore.doc("events/" + id);
+
+  try {
+    await eventRef.delete();
+  } catch (error) {
+    console.log("error creating event", error.message);
+  }
+  return eventRef;
+};
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;

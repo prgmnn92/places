@@ -27,3 +27,8 @@ export const setCurrentUser = (user) => ({
   type: ActionTypes.SET_CURRENT_USER,
   payload: user,
 });
+
+export const removeEvent = (id) => ({
+  type: ActionTypes.REMOVE_EVENT,
+  payload: id,
+});

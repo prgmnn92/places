@@ -1,7 +1,7 @@
 import { ActionTypes } from "./types";
 import shortid from "shortid";
 
-import { createEventDocument, getAllEvents } from "../firebase/firebase";
+import { createEventDocument, removeEventDocument } from "../firebase/firebase";
 
 const INITIAL_STATE = {
   isModalOpen: false,
@@ -29,19 +29,22 @@ const reducer = (state = INITIAL_STATE, action) => {
         user: state.user,
         id: shortid.generate(),
       };
-
       createEventDocument(event);
       return {
         ...state,
         events: [...state.events, event],
       };
-
+    case ActionTypes.REMOVE_EVENT:
+      removeEventDocument(action.payload);
+      return {
+        ...state,
+        events: state.events.filter((event) => event.id !== action.payload),
+      };
     case ActionTypes.SET_ALL_EVENTS:
       return {
         ...state,
         events: [...action.payload],
       };
-
     case ActionTypes.SET_ACTUAL_POSITION:
       return {
         ...state,
@@ -52,7 +55,6 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         user: action.payload,
       };
-
     default:
       return state;
   }
