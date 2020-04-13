@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { Grid } from "@material-ui/core";
 import EventCardList from "../../components/event-card-list/event-card-list.component";
 import GoogleMaps from "../../components/googleMaps/googleMaps.component";
-import InfoPaper from "../../components/info-paper/info-paper.component";
 
 const EventPage = ({ user }) => {
+  const history = useHistory();
   const content = user ? (
     <React.Fragment>
       <Grid className="sidebar" item xs={12} sm={4}>
@@ -17,7 +18,7 @@ const EventPage = ({ user }) => {
       </Grid>
     </React.Fragment>
   ) : (
-    <InfoPaper>PLEASE SIGN IN</InfoPaper>
+    history.push("/login")
   );
 
   return <React.Fragment>{content}</React.Fragment>;

@@ -1,57 +1,29 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
 
-import { Grid } from '@material-ui/core';
+import { Grid } from "@material-ui/core";
 
-import SignIn from '../../components/sign-in/sign-in.component';
-import SignUp from '../../components/sign-up/sign-up.component';
-import { auth } from '../../firebase/firebase';
-import InfoPaper from '../../components/info-paper/info-paper.component';
+import SignIn from "../../components/sign-in/sign-in.component";
+import SignUp from "../../components/sign-up/sign-up.component";
 
-class LoginSignUpPage extends React.Component {
-	state = {
-		showSignUp: false,
-		userIsSignedIn: false
-	};
+import "./login-signup.page.styles.scss";
 
-	componentDidMount() {
-		let user = auth.currentUser;
+const LoginSignUpPage = () => (
+  <React.Fragment>
+    <Grid
+      container
+      direction="row"
+      justify="center"
+      alignItems="stretch"
+      className="login-sign-up-page"
+    >
+      <Grid className="sign-in" item xs={6}>
+        <SignIn />
+      </Grid>
+      <Grid className="sign-up" item xs={6}>
+        <SignUp />
+      </Grid>
+    </Grid>
+  </React.Fragment>
+);
 
-		console.log(user);
-
-		if (user) {
-			// User is signed in.
-			this.state.setState({
-				userIsSignedIn: true
-			});
-		} else {
-			// No user is signed in.
-		}
-	}
-
-	render() {
-		const { user } = this.props;
-		return (
-			<React.Fragment>
-				{user ? (
-					<InfoPaper>YOU ARE SIGNED IN</InfoPaper>
-				) : (
-					<Grid container spacing={3}>
-						<Grid item xs={6}>
-							<SignIn />
-						</Grid>
-						<Grid item xs={6}>
-							<SignUp />
-						</Grid>
-					</Grid>
-				)}
-			</React.Fragment>
-		);
-	}
-}
-
-const mapStateToProps = (state) => ({
-	user: state.user
-});
-
-export default connect(mapStateToProps)(LoginSignUpPage);
+export default LoginSignUpPage;
