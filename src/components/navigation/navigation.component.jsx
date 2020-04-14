@@ -1,15 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  Grid,
-  AppBar,
-  Typography,
-  IconButton,
-  Button,
-  Toolbar,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+import { Grid, AppBar, Typography, Button, Toolbar } from "@material-ui/core";
 
 import { auth } from "../../firebase/firebase";
 
@@ -19,14 +11,6 @@ const Navigation = ({ user }) => (
   <Grid className="navigation" item xs={12}>
     <AppBar position="static">
       <Toolbar>
-        <IconButton
-          edge="start"
-          className="menuButton"
-          color="inherit"
-          aria-label="menu"
-        >
-          <MenuIcon />
-        </IconButton>
         <Typography variant="h6" className="title">
           <Link className="link" to="/">
             PLACES

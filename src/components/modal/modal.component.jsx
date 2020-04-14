@@ -3,6 +3,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Button, TextField } from "@material-ui/core";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 
 import { createEvent, closeModal } from "../../redux/actions";
 
@@ -15,41 +21,20 @@ class Modal extends React.Component {
     text: "",
     endTime: "",
     startTime: "",
+    date: "",
   };
   componentDidMount() {
     let date = new Date();
-    let stringDate =
-      date.getFullYear() +
-      "-" +
-      ("00" + date.getMonth()).slice(-2) +
-      "-" +
-      ("00" + date.getDay()).slice(-2) +
-      "T" +
-      ("00" + date.getHours()).slice(-2) +
-      ":" +
-      ("00" + date.getMinutes()).slice(-2);
-    console.log(stringDate);
 
     this.setState({
-      startTime: stringDate,
-      endTime: stringDate,
+      startTime: date,
+      endTime: date,
+      date: date,
     });
   }
 
   render() {
     const { isModalOpen, createEvent, closeModal, position } = this.props;
-
-    let date = new Date();
-    let stringDate =
-      date.getFullYear() +
-      "-" +
-      ("00" + date.getMonth()).slice(-2) +
-      "-" +
-      ("00" + date.getDay()).slice(-2) +
-      "T" +
-      ("00" + date.getHours()).slice(-2) +
-      ":" +
-      ("00" + date.getMinutes()).slice(-2);
 
     return (
       <React.Fragment>
@@ -80,28 +65,40 @@ class Modal extends React.Component {
               variant="filled"
               onChange={(e) => this.setState({ text: e.target.value })}
             />
-            <TextField
-              id="datetime-local"
-              label="Von"
-              type="datetime-local"
-              defaultValue={stringDate}
-              onChange={(e) => this.setState({ startTime: e.target.value })}
-              className="margin"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <TextField
-              id="datetime-local"
-              label="bis"
-              type="datetime-local"
-              defaultValue={stringDate}
-              onChange={(e) => this.setState({ endTime: e.target.value })}
-              className="margin"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                margin="normal"
+                id="date-picker-dialog"
+                label="Date picker dialog"
+                format="MM/dd/yyyy"
+                value={this.state.date}
+                onChange={(value) => this.setState({ date: value })}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="start at"
+                value={this.state.startTime}
+                onChange={(value) => this.setState({ startTime: value })}
+                KeyboardButtonProps={{
+                  "aria-label": "change time",
+                }}
+              />
+              <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="end at"
+                value={this.state.endTime}
+                onChange={(value) => this.setState({ endTime: value })}
+                KeyboardButtonProps={{
+                  "aria-label": "change time",
+                }}
+              />
+            </MuiPickersUtilsProvider>
+
             <Button
               onClick={() => {
                 if (this.state.text.length && this.state.title.length) {

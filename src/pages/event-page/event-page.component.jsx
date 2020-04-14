@@ -10,10 +10,10 @@ const EventPage = ({ user }) => {
   const history = useHistory();
   const content = user ? (
     <React.Fragment>
-      <Grid className="sidebar" item xs={12} sm={4}>
+      <Grid className="sidebar" item xs={12} sm={3}>
         <EventCardList />
       </Grid>
-      <Grid className="map" item xs={12} sm={8}>
+      <Grid className="map" item xs={12} sm={9}>
         <GoogleMaps />
       </Grid>
     </React.Fragment>
