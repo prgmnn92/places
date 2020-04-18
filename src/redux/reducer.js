@@ -5,6 +5,7 @@ import {
   createEventDocument,
   removeEventDocument,
   updateParticipants,
+  removeParticipant,
 } from "../firebase/firebase";
 
 const INITIAL_STATE = {
@@ -89,6 +90,21 @@ const reducer = (state = INITIAL_STATE, action) => {
           return event;
         }),
       };
+    case ActionTypes.LEAVE_EVENT:
+      removeParticipant(action.payload.eventId, action.payload.user);
+
+      return {
+        ...state,
+        events: state.events.map((event) => {
+          if (event.id === action.payload.eventId) {
+            return event.participants.filter(
+              (participant) => participant.id !== action.payload.user.id
+            );
+          }
+          return event;
+        }),
+      };
+
     default:
       return state;
   }

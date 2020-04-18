@@ -53,7 +53,7 @@ function SignIn({ contentHandler, setCurrentUser }) {
   return (
     <Container className="sign-in" component="main" maxWidth="xs">
       <CssBaseline />
-      <Grid item xs={12} sm={12} md={12} square>
+      <Grid item xs={12} sm={12} md={12}>
         <div className="paper">
           <Avatar className="avatar">
             <LockOutlinedIcon />
