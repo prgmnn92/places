@@ -37,9 +37,14 @@ export const updateParticipants = async (eventId, user) => {
   const docRef = firestore.doc("events/" + eventId);
 
   try {
-    await docRef.update({
-      participants: firebase.firestore.FieldValue.arrayUnion(user),
-    });
+    await docRef.set(
+      {
+        participants: {
+          [user.id]: user,
+        },
+      },
+      { merge: true }
+    );
   } catch (err) {
     console.log("error updating participants", err.message);
   }
@@ -50,7 +55,7 @@ export const removeParticipant = async (eventId, user) => {
 
   try {
     await docRef.update({
-      participants: firebase.firestore.FieldValue.arrayRemove(user),
+      participants: { [user.id]: firebase.firestore.FieldValue.delete() },
     });
   } catch (err) {
     console.log("error updating participants", err.message);

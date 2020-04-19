@@ -32,7 +32,9 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...action.payload,
         position: state.positionOfActualEvent,
         creator: state.user,
-        participants: [state.user],
+        participants: {
+          [state.user.id]: state.user,
+        },
         id: shortid.generate(),
       };
       // axios
@@ -85,7 +87,10 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         events: state.events.map((event) => {
           if (event.id === eventId) {
-            return { ...event, participants: [...event.participants, user] };
+            return {
+              ...event,
+              participants: { ...event.participants, [user.id]: user },
+            };
           }
           return event;
         }),
@@ -97,8 +102,9 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         events: state.events.map((event) => {
           if (event.id === action.payload.eventId) {
-            return event.participants.filter(
-              (participant) => participant.id !== action.payload.user.id
+            return Object.keys(event.participants).filter(
+              (participant) =>
+                event.participants[participant].id !== action.payload.user.id
             );
           }
           return event;

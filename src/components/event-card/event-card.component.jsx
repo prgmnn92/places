@@ -10,15 +10,6 @@ import { removeEvent, enterEvent, leaveEvent } from "../../redux/actions";
 import "./event-card.styles.scss";
 
 class EventCard extends React.Component {
-  state = {
-    participate: false,
-  };
-
-  componentDidMount() {
-    const { user, event } = this.props;
-    this.checkParticipate(user, event);
-  }
-
   parseDate = (date) => {
     try {
       const newDate = date.toDate();
@@ -27,24 +18,9 @@ class EventCard extends React.Component {
       return date;
     }
   };
-  checkParticipate = (user, event) => {
-    const check = event.participants.map((participant) => {
-      console.log("parti_id", participant.id);
-      console.log("user_id", user);
-      if (participant.id === user.uid) {
-        return true;
-      }
-      return false;
-    });
-    if (check.includes(true)) {
-      return this.setState({ participate: true });
-    }
-  };
 
-  // console.log("date", typeof date.toDate());
   render() {
-    const { user, event, removeEvent, enterEvent } = this.props;
-    const { participate } = this.state;
+    const { user, event, removeEvent, enterEvent, leaveEvent } = this.props;
 
     const options = {
       weekday: "long",
@@ -52,6 +28,31 @@ class EventCard extends React.Component {
       month: "long",
       day: "numeric",
     };
+
+    const leaveOrEnterButton =
+      typeof event.participants[user.id] !== undefined ? (
+        <Button
+          variant="contained"
+          size="small"
+          color="secondary"
+          className="attend-button"
+          onClick={() => leaveEvent(event.id, user)}
+          endIcon={<ExitToAppIcon />}
+        >
+          Leave
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          className="attend-button"
+          onClick={() => enterEvent(event.id, user)}
+          endIcon={<CheckIcon />}
+        >
+          Enter
+        </Button>
+      );
 
     return (
       <Paper className="event-card tooltip" elevation={3}>
@@ -74,20 +75,7 @@ class EventCard extends React.Component {
               <br />
               {this.parseDate(event.date).toLocaleDateString("en-EN", options)}
             </span>
-            <Button
-              variant="contained"
-              size="small"
-              color={participate ? "secondary" : "primary"}
-              className="attend-button"
-              onClick={() =>
-                participate
-                  ? leaveEvent(event.id, user)
-                  : enterEvent(event.id, user)
-              }
-              endIcon={participate ? <ExitToAppIcon /> : <CheckIcon />}
-            >
-              {participate ? "Leave" : "Enter"}
-            </Button>
+            {leaveOrEnterButton}
             <span className="time">
               {("00" + this.parseDate(event.startTime).getHours()).slice(-2)}:
               {("00" + this.parseDate(event.startTime).getMinutes()).slice(-2)}{" "}
@@ -101,10 +89,14 @@ class EventCard extends React.Component {
           onClick={() => removeEvent(event.id)}
         />
         <span className="tooltiptext">
-          {event.participants.map((participant, id) => {
+          {Object.keys(event.participants).map((participant) => {
             return (
-              <p className="participant" key={id}>
-                {participant.firstName} {participant.lastName}
+              <p
+                className="participant"
+                key={event.participants[participant].id}
+              >
+                {event.participants[participant].firstName}{" "}
+                {event.participants[participant].lastName}
               </p>
             );
           })}
