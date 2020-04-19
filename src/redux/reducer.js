@@ -96,16 +96,20 @@ const reducer = (state = INITIAL_STATE, action) => {
         }),
       };
     case ActionTypes.LEAVE_EVENT:
-      removeParticipant(action.payload.eventId, action.payload.user);
-
       return {
         ...state,
         events: state.events.map((event) => {
           if (event.id === action.payload.eventId) {
-            return Object.keys(event.participants).filter(
-              (participant) =>
-                event.participants[participant].id !== action.payload.user.id
-            );
+            let newParticipantList = event.participants;
+            delete newParticipantList[action.payload.user.id];
+            console.log("NEWLIST", newParticipantList);
+            removeParticipant(event.id, newParticipantList);
+            return {
+              ...event,
+              participants: {
+                ...newParticipantList,
+              },
+            };
           }
           return event;
         }),

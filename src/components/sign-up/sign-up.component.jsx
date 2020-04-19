@@ -25,6 +25,10 @@ export default function SignUp() {
 
     const { firstName, lastName, email, password } = userCredentials;
 
+    if (firstName.length < 2 || lastName.length < 2) {
+      return alert("Please fill in your name properly");
+    }
+
     try {
       const { user } = await auth.createUserWithEmailAndPassword(
         email,
@@ -43,7 +47,7 @@ export default function SignUp() {
         confirmPassword: "",
       });
     } catch (error) {
-      console.error(error);
+      alert(error.message);
     }
   };
 

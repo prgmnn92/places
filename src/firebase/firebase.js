@@ -50,12 +50,14 @@ export const updateParticipants = async (eventId, user) => {
   }
 };
 
-export const removeParticipant = async (eventId, user) => {
+export const removeParticipant = async (eventId, newParticipantsList) => {
   const docRef = firestore.doc("events/" + eventId);
 
   try {
     await docRef.update({
-      participants: { [user.id]: firebase.firestore.FieldValue.delete() },
+      participants: {
+        ...newParticipantsList,
+      },
     });
   } catch (err) {
     console.log("error updating participants", err.message);

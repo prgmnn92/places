@@ -29,30 +29,32 @@ class EventCard extends React.Component {
       day: "numeric",
     };
 
-    const leaveOrEnterButton =
-      typeof event.participants[user.id] !== undefined ? (
-        <Button
-          variant="contained"
-          size="small"
-          color="secondary"
-          className="attend-button"
-          onClick={() => leaveEvent(event.id, user)}
-          endIcon={<ExitToAppIcon />}
-        >
-          Leave
-        </Button>
-      ) : (
-        <Button
-          variant="contained"
-          size="small"
-          color="primary"
-          className="attend-button"
-          onClick={() => enterEvent(event.id, user)}
-          endIcon={<CheckIcon />}
-        >
-          Enter
-        </Button>
-      );
+    const leaveOrEnterButton = Object.keys(event.participants).includes(
+      user.id
+    ) ? (
+      <Button
+        variant="contained"
+        size="small"
+        disabled={event.creator.id === user.id ? true : false}
+        color="secondary"
+        className="attend-button"
+        onClick={() => leaveEvent(event.id, user)}
+        endIcon={<ExitToAppIcon />}
+      >
+        Leave
+      </Button>
+    ) : (
+      <Button
+        variant="contained"
+        size="small"
+        color="primary"
+        className="attend-button"
+        onClick={() => enterEvent(event.id, user)}
+        endIcon={<CheckIcon />}
+      >
+        Enter
+      </Button>
+    );
 
     return (
       <Paper className="event-card tooltip" elevation={3}>

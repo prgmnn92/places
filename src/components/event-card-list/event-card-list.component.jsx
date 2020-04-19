@@ -10,16 +10,18 @@ class EventCardList extends React.Component {
     const { events } = this.props;
     return (
       <div className="event-card-list">
-        {events.map((event, id) => (
-          <EventCard event={event} key={id} />
-        ))}
+        {events
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map((event, id) => (
+            <EventCard event={event} key={id} />
+          ))}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  events: state.events
+const mapStateToProps = (state) => ({
+  events: state.events,
 });
 
 export default connect(mapStateToProps)(EventCardList);
