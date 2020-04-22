@@ -18,6 +18,7 @@ firebase.initializeApp(firebaseConfig);
 export const createEventDocument = async (event) => {
   const eventRef = firestore.doc("events/" + event.id);
   //const snapShot = await eventRef.get();
+  const snap = 1;
 
   const createdAt = new Date();
 
