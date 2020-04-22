@@ -4,15 +4,18 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import RoomIcon from "@material-ui/icons/Room";
 import Typography from "@material-ui/core/Typography";
+import { useHistory } from "react-router-dom";
 
 import Container from "@material-ui/core/Container";
+import Link from "@material-ui/core/Link";
 
 import { auth, createUserProfileDocument } from "../../firebase/firebase";
 import "./sign-up.styles.scss";
 
-export default function SignUp() {
+export default function SignUp({ toggle }) {
+  const history = useHistory();
   const [userCredentials, setUserCredentials] = useState({
     firstName: "",
     lastName: "",
@@ -46,6 +49,7 @@ export default function SignUp() {
         password: "",
         confirmPassword: "",
       });
+      history.push("/");
     } catch (error) {
       alert(error.message);
     }
@@ -65,9 +69,9 @@ export default function SignUp() {
       <CssBaseline />
       <div className="paper">
         <Avatar className="avatar">
-          <LockOutlinedIcon />
+          <RoomIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography style={{ color: "#24323a" }} component="h1" variant="h5">
           Sign up
         </Typography>
         <form className="form" noValidate>
@@ -133,6 +137,13 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" onClick={toggle} variant="body2">
+                Click here to sign in...
+              </Link>
+            </Grid>
+          </Grid>
         </form>
       </div>
     </Container>

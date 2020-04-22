@@ -9,7 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import RoomIcon from "@material-ui/icons/Room";
 import Typography from "@material-ui/core/Typography";
 
 import { auth } from "../../firebase/firebase";
@@ -17,7 +17,7 @@ import { setCurrentUser } from "../../redux/actions";
 
 import "./sign-in.styles.scss";
 
-function SignIn({ contentHandler, setCurrentUser }) {
+function SignIn({ setCurrentUser, toggle }) {
   const history = useHistory();
   const [userCredentials, setUserCredentials] = useState({
     email: "",
@@ -56,9 +56,9 @@ function SignIn({ contentHandler, setCurrentUser }) {
       <Grid item xs={12} sm={12} md={12}>
         <div className="paper">
           <Avatar className="avatar">
-            <LockOutlinedIcon />
+            <RoomIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography style={{ color: "#24323a" }} component="h1" variant="h5">
             Sign in
           </Typography>
           <form className="form" noValidate>
@@ -98,8 +98,8 @@ function SignIn({ contentHandler, setCurrentUser }) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
+                <Link href="#" onClick={toggle} variant="body2">
+                  Click here to sign up...
                 </Link>
               </Grid>
             </Grid>

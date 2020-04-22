@@ -7,18 +7,11 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { removeEvent, enterEvent, leaveEvent } from "../../redux/actions";
 
+import { parseDate } from "../../utils/utils";
+
 import "./event-card.styles.scss";
 
 class EventCard extends React.Component {
-  parseDate = (date) => {
-    try {
-      const newDate = date.toDate();
-      return newDate;
-    } catch (error) {
-      return date;
-    }
-  };
-
   render() {
     const { user, event, removeEvent, enterEvent, leaveEvent } = this.props;
 
@@ -75,14 +68,14 @@ class EventCard extends React.Component {
             <span className="geocode">
               {/* Example Street 58 */}
               <br />
-              {this.parseDate(event.date).toLocaleDateString("en-EN", options)}
+              {parseDate(event.date).toLocaleDateString("en-EN", options)}
             </span>
             {leaveOrEnterButton}
             <span className="time">
-              {("00" + this.parseDate(event.startTime).getHours()).slice(-2)}:
-              {("00" + this.parseDate(event.startTime).getMinutes()).slice(-2)}{" "}
-              - {("00" + this.parseDate(event.endTime).getHours()).slice(-2)}:
-              {("00" + this.parseDate(event.endTime).getMinutes()).slice(-2)}
+              {("00" + parseDate(event.startTime).getHours()).slice(-2)}:
+              {("00" + parseDate(event.startTime).getMinutes()).slice(-2)} -{" "}
+              {("00" + parseDate(event.endTime).getHours()).slice(-2)}:
+              {("00" + parseDate(event.endTime).getMinutes()).slice(-2)}
             </span>
           </div>
         </div>

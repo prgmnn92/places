@@ -3,10 +3,12 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import Modal from "../modal/modal.component";
+import myMarker from "../../assets/marker.svg";
 
+import Modal from "../modal/modal.component";
 import { setActualPosition, openModal } from "../../redux/actions";
 import { getAllEvents } from "../../firebase/firebase";
+import { parseDate } from "../../utils/utils";
 
 import "./googleMaps.styles.scss";
 
@@ -19,16 +21,36 @@ class GoogleMaps extends React.Component {
       map = initMap(this);
       //const { events } = this.props;
 
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+
       for (let event of events) {
-        let content = `<h1>${event.title}</h1><br/><div>${event.text}</div>`;
+        let content = `<div class="info-window">
+        <h1>${event.title}</h1>
+        <p class="text">${event.text}</p>
+        <p class="date">${parseDate(event.date).toLocaleDateString(
+          "en-EN",
+          options
+        )}</p>
+        <p class="time">from ${(
+          "00" + parseDate(event.startTime).getHours()
+        ).slice(-2)}:
+        ${("00" + parseDate(event.startTime).getMinutes()).slice(-2)} to 
+        ${("00" + parseDate(event.endTime).getHours()).slice(-2)}:
+        ${("00" + parseDate(event.endTime).getMinutes()).slice(-2)}</p>
+        </div>`;
         let marker = new google.maps.Marker({
           position: event.position,
           map: map,
+          icon: myMarker,
         });
 
         let infowindow = new google.maps.InfoWindow({
           content: content,
-
           maxWidth: 350,
         });
 
@@ -60,7 +82,10 @@ function initMap(component) {
   });
 
   for (let event of component.props.events) {
-    let marker = new google.maps.Marker({ position: event.position, map: map });
+    let marker = new google.maps.Marker({
+      position: event.position,
+      map: map,
+    });
 
     var infowindow = new google.maps.InfoWindow({
       content: event.text,
@@ -76,17 +101,12 @@ function initMap(component) {
   map.addListener("click", (event) => {
     console.log(event);
     let position = event.latLng;
-    // let position = {
-    //   ...event.latLng.lat,
-    //   ...event.latLng.lng,
-    // };
+
     let latLng = {
       lat: position.lat(),
       lng: position.lng(),
     };
 
-    // marker erst erstellen wenn openModal fertig ist bzw  create Button gedrückt wurde
-    console.log(latLng);
     component.props.setActualPosition(latLng);
     component.props.openModal();
   });

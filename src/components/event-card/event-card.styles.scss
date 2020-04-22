@@ -56,7 +56,6 @@
         margin-bottom: 10px;
       }
       .attend-button {
-
         position: absolute;
         box-sizing: border-box;
         font-size: 0.75rem;
@@ -86,10 +85,21 @@
 
 .tooltip {
   &:hover {
-    .tooltiptext {
-      visibility: visible;
-      opacity: 1;
-      transition: 0.4s;
+    @media screen and (max-width: 600px) {
+      &:active {
+        .tooltiptext {
+          visibility: visible;
+          opacity: 1;
+          transition: 0.4s;
+        }
+      }
+    }
+    @media screen and (min-width: 600px) {
+      .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+        transition: 0.4s;
+      }
     }
   }
 
@@ -97,20 +107,26 @@
     visibility: hidden;
     opacity: 0;
     width: 140px;
-    background-color: black;
-    color: #fff;
+    background-color: #ffa372e1;
+    color: #141c20;
     text-align: left;
     border-radius: 6px;
     padding: 5px 0;
+    font-weight: bold;
 
     /* Position the tooltip */
     position: absolute;
-    z-index: 1;
-    top: -5px;
-    left: 105%;
+    z-index: 200;
+    top: 108%;
+    left: calc(100% - 140px);
+
+    @media screen and (max-width: 600px) {
+      left: 45%;
+      top: 30%;
+    }
 
     .participant {
-      margin: 0 5px;
+      margin: 0 8px;
       font-size: 0.9rem;
     }
   }

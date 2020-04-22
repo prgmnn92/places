@@ -1,3 +1,13 @@
-.navigation {
-    max-height: 100px;
+.navbar {
+  max-height: 60px;
+
+  .menu-button {
+    display: block;
+    @media (min-width: 600px) {
+      display: none;
+    }
+  }
+}
+.drawer-paper {
+  width: 300px;
 }

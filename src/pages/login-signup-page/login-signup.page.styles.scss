@@ -1,6 +1,33 @@
 .login-sign-up-page {
-    margin-top: -90px;
+  position: absolute;
+  max-width: 1100px;
+  height: 550px;
+  top: 22%;
+  left: calc(50% - 1100px / 2);
+  margin: auto;
 
+  .background {
+    background: url("../../assets/place.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    @media screen and (max-width: 600px) {
+      display: none;
+    }
+  }
 
-    
+  .input {
+    padding: 60px 110px;
+
+    @media screen and (max-width: 600px) {
+      padding: 10px 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .login-sign-up-page {
+    left: 0;
+    top: 60px;
+    height: 200%;
+  }
 }

@@ -1,0 +1,12 @@
+.sidebar {
+    overflow-y: auto;
+
+    z-index: 100;
+    @media screen and (max-width: 600px) {
+        display: none;
+        
+    }
+}
+.sidebar::-webkit-scrollbar {
+    display: none;
+  }
