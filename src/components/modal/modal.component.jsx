@@ -11,9 +11,10 @@ import {
 } from "@material-ui/pickers";
 
 import { createEvent, closeModal } from "../../redux/actions";
+import { createMarkerWithInfo } from "../../utils/utils";
+import Backdrop from "../backdrop/backdrop.component";
 
 import "./modal.styles.scss";
-import Backdrop from "../backdrop/backdrop.component";
 
 class Modal extends React.Component {
   state = {
@@ -34,7 +35,13 @@ class Modal extends React.Component {
   }
 
   render() {
-    const { isModalOpen, createEvent, closeModal, position } = this.props;
+    const {
+      isModalOpen,
+      createEvent,
+      closeModal,
+      position,
+      mapRef,
+    } = this.props;
 
     return (
       <React.Fragment>
@@ -50,7 +57,7 @@ class Modal extends React.Component {
             <TextField
               className="margin"
               id="filled-basic"
-              label="Eventname"
+              label="event title"
               variant="filled"
               value={this.state.title}
               onChange={(e) => this.setState({ title: e.target.value })}
@@ -58,7 +65,7 @@ class Modal extends React.Component {
             <TextField
               className="margin"
               id="filled-multiline-static"
-              label="Description"
+              label="description and address"
               multiline
               rows="6"
               value={this.state.text}
@@ -79,7 +86,7 @@ class Modal extends React.Component {
               />
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
+                id="time-picker-start"
                 label="start at"
                 value={this.state.startTime}
                 onChange={(value) => this.setState({ startTime: value })}
@@ -89,7 +96,7 @@ class Modal extends React.Component {
               />
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
+                id="time-picker-end"
                 label="end at"
                 value={this.state.endTime}
                 onChange={(value) => this.setState({ endTime: value })}
@@ -101,23 +108,17 @@ class Modal extends React.Component {
 
             <Button
               onClick={() => {
+                if (
+                  this.state.startTime.getTime() >= this.state.endTime.getTime()
+                ) {
+                  alert(
+                    "Your start time have to be earlier than your end time."
+                  );
+                }
                 if (this.state.text.length && this.state.title.length) {
                   createEvent(this.state);
 
-                  let content = `<h1>${this.state.title}</h1><br/><div>${this.state.text}</div>`;
-                  let marker = new google.maps.Marker({
-                    position: position,
-                    map: this.props.mapRef,
-                  });
-
-                  let infowindow = new google.maps.InfoWindow({
-                    content: content,
-                    maxWidth: 350,
-                  });
-
-                  google.maps.event.addListener(marker, "click", () => {
-                    infowindow.open(map, marker);
-                  });
+                  createMarkerWithInfo(position, mapRef, this.state);
                   closeModal();
                   this.setState({
                     text: "",

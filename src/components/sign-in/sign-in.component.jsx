@@ -42,7 +42,6 @@ function SignIn({ setCurrentUser, toggle }) {
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-    console.log(userCredentials);
 
     setUserCredentials({
       ...userCredentials,

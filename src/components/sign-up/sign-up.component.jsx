@@ -40,8 +40,6 @@ export default function SignUp({ toggle }) {
 
       await createUserProfileDocument(user, { firstName, lastName });
 
-      console.log(user);
-
       setUserCredentials({
         firstName: "",
         lastname: "",

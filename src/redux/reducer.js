@@ -37,16 +37,6 @@ const reducer = (state = INITIAL_STATE, action) => {
         },
         id: shortid.generate(),
       };
-      // axios
-      // 	.post('/events', {
-      // 		...event
-      // 	})
-      // 	.then((res) => {
-      // 		console.log(res);
-      // 	})
-      // 	.catch((err) => {
-      // 		console.log(err);
-      // 	});
       createEventDocument(event);
       return {
         ...state,
@@ -80,7 +70,6 @@ const reducer = (state = INITIAL_STATE, action) => {
     case ActionTypes.ENTER_EVENT:
       //look for Event id in events array and update user into participant list
       const { user, eventId } = action.payload;
-      console.log(eventId);
       updateParticipants(eventId, user);
 
       return {
@@ -102,7 +91,6 @@ const reducer = (state = INITIAL_STATE, action) => {
           if (event.id === action.payload.eventId) {
             let newParticipantList = event.participants;
             delete newParticipantList[action.payload.user.id];
-            console.log("NEWLIST", newParticipantList);
             removeParticipant(event.id, newParticipantList);
             return {
               ...event,

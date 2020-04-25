@@ -59,8 +59,8 @@ class EventCard extends React.Component {
           </h6>
           <h3>{event.title}</h3>
           <span className="event-description">
-            {event.text.substring(0, 150) +
-              (event.text.length > 150 ? "..." : "")}
+            {event.text.substring(0, 90) +
+              (event.text.length > 90 ? "..." : "")}
           </span>
 
           <div className="row">
@@ -81,7 +81,11 @@ class EventCard extends React.Component {
         </div>
         <HighlightOffIcon
           className="delete-button"
-          onClick={() => removeEvent(event.id)}
+          onClick={() => {
+            if (user.id !== event.creator.id)
+              return alert("You are not the creator of this event.");
+            removeEvent(event.id);
+          }}
         />
         <span className="tooltiptext">
           {Object.keys(event.participants).map((participant) => {
