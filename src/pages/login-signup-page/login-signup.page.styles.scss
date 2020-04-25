@@ -10,7 +10,7 @@
     background: url("../../assets/place.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 1280px) {
       display: none;
     }
   }
@@ -18,13 +18,13 @@
   .input {
     padding: 60px 110px;
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 960px) {
       padding: 10px 20px;
     }
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1280px) {
   .login-sign-up-page {
     left: 0;
     top: 60px;

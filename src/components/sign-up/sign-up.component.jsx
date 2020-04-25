@@ -34,7 +34,7 @@ export default function SignUp({ toggle }) {
 
     try {
       const { user } = await auth.createUserWithEmailAndPassword(
-        email,
+        email.trim(),
         password
       );
 

@@ -22,8 +22,8 @@ const LoginSignUpPage = () => {
         container
         className="login-sign-up-page"
       >
-        <Grid className="background" item xs={12} sm={6}></Grid>
-        <Grid className="input" item xs={12} sm={6}>
+        <Grid className="background" item xs={12} lg={6}></Grid>
+        <Grid className="input" item xs={12} lg={6}>
           {inputToggle ? (
             <SignIn toggle={SignInOrSignUpHandler} />
           ) : (
